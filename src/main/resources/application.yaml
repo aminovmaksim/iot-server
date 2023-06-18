@@ -1,0 +1,6 @@
+server:
+  port: 80
+
+authorization:
+  app-secret: ${APP_SECRET}
+  yandex-home-token: ${YANDEX_HOME_TOKEN}
