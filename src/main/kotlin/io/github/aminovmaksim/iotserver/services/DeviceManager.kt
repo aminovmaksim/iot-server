@@ -19,6 +19,38 @@ class DeviceManager(
     // Scenario name -> ID
     private var scenarios = HashMap<String, String>()
 
+    @PostConstruct
+    fun init() {
+        val homeInfo = getHomeInfo()
+
+        homeInfo.devices.forEach { device ->
+            devices[device.name] = device.id
+            print("DEVICE: ${device.name} (${device.type}) - ${device.id} | ")
+            println(device.capabilities)
+        }
+
+        homeInfo.scenarios.forEach { scenario ->
+            scenarios[scenario.name] = scenario.id
+            println("SCENARIO: ${scenario.name} - ${scenario.id}")
+        }
+    }
+
+    fun getHomeInfo(): YandexHomeInfo {
+        val yandexHomeInfo = webClient.get()
+            .uri("https://api.iot.yandex.net/v1.0/user/info")
+            .header("Authorization", "Bearer $yandexHomeToken")
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .bodyToMono(YandexHomeInfo::class.java)
+            .block()
+
+        if (yandexHomeInfo?.status != "ok") {
+            throw IllegalStateException("Cannot get yandex devices: ${yandexHomeInfo?.message}")
+        }
+
+        return yandexHomeInfo
+    }
+
     fun deviceOnOff(name: String, value: Boolean) {
         if (devices[name] == null) {
             throw RuntimeException("Device $name not found")
@@ -66,31 +98,6 @@ class DeviceManager(
 
         if (response?.status != "ok") {
             throw RuntimeException("Device $name action error: ${response?.message}")
-        }
-    }
-
-    @PostConstruct
-    fun initialize() {
-        val yandexHomeInfo = webClient.get()
-            .uri("https://api.iot.yandex.net/v1.0/user/info")
-            .header("Authorization", "Bearer $yandexHomeToken")
-            .accept(MediaType.APPLICATION_JSON)
-            .retrieve()
-            .bodyToMono(YandexHomeInfo::class.java)
-            .block()
-
-        if (yandexHomeInfo?.status != "ok") {
-            throw IllegalStateException("Cannot get yandex devices: ${yandexHomeInfo?.message}")
-        }
-
-        yandexHomeInfo.devices.forEach { device ->
-            devices[device.name] = device.id
-            println("DEVICE: ${device.name} (${device.type}) - ${device.id}")
-        }
-
-        yandexHomeInfo.scenarios.forEach { scenario ->
-            scenarios[scenario.name] = scenario.id
-            println("SCENARIO: ${scenario.name} - ${scenario.id}")
         }
     }
 }

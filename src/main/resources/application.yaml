@@ -4,3 +4,7 @@ server:
 authorization:
   app-secret: ${APP_SECRET}
   yandex-home-token: ${YANDEX_HOME_TOKEN}
+
+home:
+  max-temperature: ${HOME_MAX_TEMPERATURE}
+  min-temperature: ${HOME_MIN_TEMPERATURE}
