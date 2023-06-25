@@ -8,3 +8,4 @@ authorization:
 home:
   max-temperature: ${HOME_MAX_TEMPERATURE}
   min-temperature: ${HOME_MIN_TEMPERATURE}
+  temperature-check-cron: ${TEMPERATURE_CHECK_CRON}

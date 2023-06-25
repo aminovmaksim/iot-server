@@ -13,7 +13,7 @@ class ScheduledService(
     @Value("\${home.min-temperature}") private val minTemperature: Float
 ) {
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "\${home.temperature-check-cron}")
     fun checkTemperature() {
         try {
             print("Проверка текущей температуры в комнате: ")
