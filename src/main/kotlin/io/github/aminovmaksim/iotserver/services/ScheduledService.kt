@@ -20,12 +20,12 @@ class ScheduledService(
             val homeInfo = deviceManager.getHomeInfo()
             val acWorking = getConditionerOnOffState(homeInfo)
             val temperature = getTemperature(homeInfo)
-            if (temperature > maxTemperature && !acWorking) {
+            if (temperature >= maxTemperature && !acWorking) {
                 println("$temperature (больше чем $maxTemperature) - включаю кондиционер")
                 deviceManager.deviceOnOff("Кондиционер", true)
                 return
             }
-            if (temperature < minTemperature && acWorking) {
+            if (temperature <= minTemperature && acWorking) {
                 println("$temperature (меньше чем $minTemperature) - выключаю кондиционер")
                 deviceManager.deviceOnOff("Кондиционер", false)
                 return
