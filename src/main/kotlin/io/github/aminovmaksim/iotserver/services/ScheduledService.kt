@@ -10,11 +10,15 @@ import java.lang.IllegalStateException
 class ScheduledService(
     val deviceManager: DeviceManager,
     @Value("\${home.max-temperature}") private val maxTemperature: Float,
-    @Value("\${home.min-temperature}") private val minTemperature: Float
+    @Value("\${home.min-temperature}") private val minTemperature: Float,
+    @Value("\${home.auto-ac}") private val autoAc: Boolean
 ) {
 
     @Scheduled(cron = "\${home.temperature-check-cron}")
     fun checkTemperature() {
+        if (!autoAc) {
+            return
+        }
         try {
             print("Проверка текущей температуры в комнате: ")
             val homeInfo = deviceManager.getHomeInfo()
