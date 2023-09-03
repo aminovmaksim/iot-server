@@ -1,8 +1,10 @@
 server:
-  port: 8080
+  port: ${IOT_SERVER_PORT}
+  servlet:
+    context-path: ${IOT_CONTEXT_PATH}
 
 authorization:
-  app-secret: ${APP_SECRET}
+  app-secret: ${IOT_APP_SECRET}
   yandex-home-token: ${YANDEX_HOME_TOKEN}
 
 home:
