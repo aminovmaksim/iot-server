@@ -1,8 +1,8 @@
 package io.github.aminovmaksim.iotserver.controllers
 
 import io.github.aminovmaksim.iotserver.model.ResponseWrap
-import io.github.aminovmaksim.iotserver.model.yandex.HsvColor
-import io.github.aminovmaksim.iotserver.services.DeviceManager
+import io.github.aminovmaksim.iotserver.model.yandex.enums.HsvColor
+import io.github.aminovmaksim.iotserver.services.DeviceService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/yandex")
 class YandexController(
-    private val deviceManager: DeviceManager,
+    private val deviceService: DeviceService,
     @Value("\${authorization.app-secret}") private val appSecretString: String
 ) {
 
@@ -25,7 +25,7 @@ class YandexController(
     ): ResponseWrap {
         return try {
             checkSecret(secret)
-            deviceManager.deviceOnOff(name, value)
+            deviceService.deviceOnOff(name, value)
             ResponseWrap(true)
         } catch (e: Exception) {
             ResponseWrap(false, e.message)
@@ -40,7 +40,7 @@ class YandexController(
     ): ResponseWrap {
         return try {
             checkSecret(secret)
-            deviceManager.deviceSetColor(name, value)
+            deviceService.deviceSetColor(name, value)
             ResponseWrap(true)
         } catch (e: Exception) {
             ResponseWrap(false, e.message)
@@ -54,7 +54,7 @@ class YandexController(
     ): ResponseWrap {
         return try {
             checkSecret(secret)
-            deviceManager.runScenario(name)
+            deviceService.runScenario(name)
             ResponseWrap(true)
         } catch (e: Exception) {
             ResponseWrap(false, e.message)
